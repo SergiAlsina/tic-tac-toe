@@ -60,6 +60,13 @@ function App() {
     setTurn(TURNS.X)
     setWinner(null)
   }
+
+  const chekEndGame = (newBoard) => {
+    //revisamos si hay un empate
+    //si no hay más espacios vacíos
+    //en el tablero
+    return newBoard.every((square) => square !== null)
+  }
   
   const updateBoard = (index)=> {
     //no actualizamos esta posición
@@ -69,13 +76,15 @@ function App() {
     const newBoard = [...board]
     newBoard[index] = turn 
     setBoard(newBoard)
-    //actualizar el turno
+    //cambiar el turno
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
     //revisar si hay ganador
     const newWinner = checkWinner(newBoard)
     if (newWinner) {
       setWinner(newWinner) 
+    } else if (chekEndGame(newBoard)) {
+      setWinner(false) //empate
     }
   }
 
@@ -85,14 +94,14 @@ function App() {
       <button onClick={resetGame}>Reset del juego</button>
       <section className="game">
         {
-          board.map((_, index) => {
+          board.map((square, index) => {
             return (
               <Square
                 key={index}
                 index={index}
                 updateBoard={updateBoard}
               >
-                {board[index]}
+                {square}
               </Square>
             )
           })
